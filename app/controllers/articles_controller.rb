@@ -1,6 +1,7 @@
 class ArticlesController < ApplicationController
     
     def index
+        @articles = Article.all
     end
     
     def new
@@ -8,6 +9,8 @@ class ArticlesController < ApplicationController
     end
 
     def create
+        #render plain: params[:article].inspect 
+            
         @article = Article.new(article_params)
         if @article.save
             flash[:notice] = "Article was successfully created."
@@ -15,6 +18,7 @@ class ArticlesController < ApplicationController
         else 
             render 'new'
         end
+
     end
 
     def show
@@ -22,7 +26,18 @@ class ArticlesController < ApplicationController
     end
 
     def edit
-        
+        @article = Article.find(params[:id])
+    end
+
+    def update
+        @article = Article.find(params[:id])
+        if @article.update (article_params)
+            flash[:notice] = "Article was updated"
+            redirect_to article_path(@article)
+        else
+            flash[:notice] = "Article was not updated"
+            render 'edit'
+        end
     end
 
 
